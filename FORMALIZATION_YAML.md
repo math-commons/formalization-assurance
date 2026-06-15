@@ -22,7 +22,7 @@ formalization project keeps one at its top level.
 - **`fidelity.divergences`** — how the formalization differs from the literature /
   from prior formalizations (representation choices; remaining literature deps).
 - **`review`** — review status, reviewers, comparator notes; can aggregate the
-  `docs/vetting/` front-matter.
+  `audit/vetting/` front-matter.
 - **`alignment.statements`** — a `source ↔ lean ↔ module ↔ status ↔ note` table
   (the machine-readable faithfulness map).
 - **`acknowledgements`**.
@@ -55,6 +55,6 @@ What stays hand-maintained is **judgment**, not facts: the per-axiom *vetting*
 (is it true?), the *discharge plan*, the *fidelity divergences*, the *scope* prose.
 
 > Symptom to watch for: `status.axioms` listing `noncomputable def`s as axioms, or
-> omitting real ones, or a README count that disagrees with `docs/axiom-report.txt`.
+> omitting real ones, or a README count that disagrees with `audit/axiom-report.txt`.
 > All are the same root cause — a kernel fact being hand-authored. Fix the
 > generation, not the entry.

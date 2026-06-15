@@ -11,7 +11,7 @@ an axiom** — never let the audit drift behind the code.
 
 > The audit holds **verdicts, plans, and consumers**. The *evidence* behind each
 > verdict (model + version + verbatim prompt + reply) lives in the per-axiom
-> records under `docs/vetting/` — see [`VETTING.md`](VETTING.md). The audit's
+> records under `audit/vetting/` — see [`VETTING.md`](VETTING.md). The audit's
 > `Vetting` column should link to the record.
 >
 > The axiom **list and counts are kernel facts** — do not hand-author them; derive
@@ -30,7 +30,7 @@ an axiom** — never let the audit drift behind the code.
 
 Multiple codes per axiom are common (`DT, LP, SA`). Always record the **model +
 version + date** alongside (different model versions occasionally disagree) — in the
-linked `docs/vetting/` record, and briefly in the audit's notes.
+linked `audit/vetting/` record, and briefly in the audit's notes.
 
 ## Rating scale (the `Rating` column)
 
@@ -73,7 +73,7 @@ become a proved theorem.
 ### <Axiom name>
 **File**: `<path>:<line>`
 **Statement** (informal): one paragraph, plain language.
-**Vetting**: **<Rating>** (`<codes>`) — reference + brief justification → [vetting](docs/vetting/<Axiom>.md)
+**Vetting**: **<Rating>** (`<codes>`) — reference + brief justification → [vetting](audit/vetting/<Axiom>.md)
 **Strategy / Plan**: how to discharge + estimate; if >3 lines, link a discharge-plan doc.
 **Consumers**: downstream theorems that load-bear on this axiom.
 ```
@@ -85,7 +85,7 @@ become a proved theorem.
 ```
 
 Use anchored markdown links for `File:Line`. If a plan exceeds ~3 lines, break out a
-`docs/<axiom-name>-discharge-plan.md` (goal + effort, API to reuse, step-by-step
+`audit/<axiom-name>-discharge-plan.md` (goal + effort, API to reuse, step-by-step
 outline with lemma signatures, acceptance criteria) and link it.
 
 ## Updating discipline
@@ -93,9 +93,9 @@ outline with lemma signatures, acceptance criteria) and link it.
 - **Same-commit rule**: add/remove/modify an axiom → update the audit in the *same*
   commit. (Counts themselves are CI-generated, not hand-edited — see the rule above.)
 - **Per-discharge**: when an axiom becomes a theorem, move its row to *Recently
-  discharged* with the strategy + proof file:line. Keep its `docs/vetting/` record
+  discharged* with the strategy + proof file:line. Keep its `audit/vetting/` record
   (`discharged: true`) for provenance.
-- **Per-vet**: when a vet completes, add the source code + link the `docs/vetting/`
+- **Per-vet**: when a vet completes, add the source code + link the `audit/vetting/`
   record; re-vet (new record, `superseded_by` the old) when a statement is
   **strengthened**.
 - **On rename/move**: chase every reference; the audit names the axioms.
