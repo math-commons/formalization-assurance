@@ -1,0 +1,69 @@
+# formalization-assurance
+
+Shared conventions for **assuring** Lean 4 formalization projects across
+`math-commons` (and beyond): how we establish — and how a reader can *check* — that
+a formalization is correct in the senses that actually matter.
+
+A proof assistant's kernel certifies that **proofs** are valid. It does **not**
+certify that a *definition means what its name claims*, that a stated theorem is
+*non-vacuous*, or that an assumed `axiom` is *true*. A development can be
+`sorry`-free, axiom-clean, and green in CI while still formalizing the **wrong
+object** or resting on a **false axiom**. These conventions close that gap with
+artifacts a mathematician can audit **without reading the proofs**.
+
+## The assurance model — three layers
+
+1. **Verification** — *are the proofs valid relative to explicit assumptions?*
+   The kernel (`lake build`) + the axiom certificate (`#print axioms`, CI-pinned).
+   In a proof assistant this is **largely automatic**.
+2. **Assumption review** — *are the assumed axioms true?* The kernel cannot do
+   this. Established by **soundness review** (cross-model deep-think + Codex +
+   literature + self-audit), captured as durable per-axiom records.
+3. **Validation** — *did we formalize the right object?* Two sub-layers:
+   **(a) faithfulness** (the informal↔formal correspondence) and
+   **(b) characterization** (acceptance theorems up to a categorical
+   "the specification has exactly one model" certificate).
+
+> **Slogan:** in formal mathematics, *verification is nearly free; the residual is
+> all validation (plus assumption review).*
+
+## Documents
+
+| File | What it covers |
+|---|---|
+| [`VERIFICATION_VALIDATION.md`](VERIFICATION_VALIDATION.md) | the V&V terminology, the faithfulness/characterization layers, operational-vs-categorical specs |
+| [`VETTING.md`](VETTING.md) | capturing axiom **soundness reviews** as durable records; the strictness ladder **L0–L3**; CI policy |
+| [`AXIOM_AUDIT_FORMAT.md`](AXIOM_AUDIT_FORMAT.md) | the per-project `AXIOM_AUDIT.md` format (ratings, source codes, discharge plans) |
+| [`FORMALIZATION_YAML.md`](FORMALIZATION_YAML.md) | the Mathlib-Initiative `formalization.yaml` project card + the "generate, don't hand-author" rule |
+| [`COMPARATOR.md`](COMPARATOR.md) | external kernel-replay verification (Lean FRO comparator) protocol + registry |
+| [`ADOPTION.md`](ADOPTION.md) | how a project adopts these conventions and declares its local settings |
+| [`templates/`](templates/) | copy-in templates: vetting entry, `policy.yml`, `AXIOM_AUDIT.md` skeleton |
+
+## Core principles
+
+1. **Generate machine facts; never hand-author them.** Axiom lists, axiom/sorry
+   counts are *kernel facts* — generate them from `#print axioms`, enforce in CI,
+   and never ask a contributor to *anticipate* a post-merge count. (Hand-authored
+   counts drift the moment two PRs land concurrently.)
+2. **Capture evidence, not just verdicts.** A soundness review saves the verbatim
+   model + version + prompt + reply, not a paraphrase — so it is reproducible.
+3. **Calibrate strictness to contributors.** Enforcement is a per-project knob
+   (L0–L3 in `VETTING.md`), not a one-size mandate; tighten it as a project's
+   contributor base and stakes grow.
+4. **Characterize, don't just accumulate.** The strongest validation is a
+   *categorical* certificate ("the spec has exactly one model"), not the longest
+   checklist; an operational API is typically non-categorical.
+
+## Relationship to other sources
+
+- The **methodology paper** (narrative + justification) is the publication; this
+  repo is the **operational spec** projects implement.
+- `~/.claude/CLAUDE.md` carries one-line pointers here so agent sessions
+  auto-consult these conventions.
+- Lean *code* conventions (naming, style, tactics) live separately in
+  `mathlib-ready/docs/`; this repo is about *project-level assurance*, not code
+  style.
+
+## Status
+
+v1 scaffold. First adopter: `math-commons/jacobian-challenge`.
