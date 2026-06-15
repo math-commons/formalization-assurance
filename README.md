@@ -27,13 +27,37 @@ artifacts a mathematician can audit **without reading the proofs**.
 > **Slogan:** in formal mathematics, *verification is nearly free; the residual is
 > all validation (plus assumption review).*
 
+## Two modes — backward and forward chaining
+
+Projects sit on a spectrum, and the dominant risk (hence the assurance spine) differs:
+
+- **Backward-chaining** — a posed *target spec* (e.g. a challenge): stub unknowns as
+  `axiom`s, discharge top-down. Central risk = **unsound axioms**. Spine:
+  `AXIOM_AUDIT_FORMAT` + `VETTING` (assumption review) + the categorical certificate
+  in `VERIFICATION_VALIDATION`.
+- **Forward-chaining** — formalize a large external *corpus* bottom-up
+  (FLMF/DLMF, the Matrix Cookbook, a textbook): build up from foundations, ≈ no
+  axioms. Central risk = **unfaithful statements** + **incomplete coverage**. Spine:
+  `CORRESPONDENCE_INDEX` + `FIDELITY_REVIEW`.
+
+Both share verification (kernel + axiom certificate), faithfulness,
+`formalization.yaml`, and the comparator; they differ in which review layer carries
+the weight. Many projects mix both modes.
+
+> **Spine in one line:** backward chaining asks *"are the assumptions true?"*;
+> forward chaining asks *"are the statements faithful, and is the corpus covered?"*
+> Note `proved ≠ faithful`: a sorry-free, axiom-free theorem can still be the wrong
+> statement.
+
 ## Documents
 
 | File | What it covers |
 |---|---|
 | [`VERIFICATION_VALIDATION.md`](VERIFICATION_VALIDATION.md) | the V&V terminology, the faithfulness/characterization layers, operational-vs-categorical specs |
-| [`VETTING.md`](VETTING.md) | capturing axiom **soundness reviews** as durable records; the strictness ladder **L0–L3**; CI policy |
-| [`AXIOM_AUDIT_FORMAT.md`](AXIOM_AUDIT_FORMAT.md) | the per-project `AXIOM_AUDIT.md` format (ratings, source codes, discharge plans) |
+| [`VETTING.md`](VETTING.md) | *(backward)* capturing axiom **soundness reviews** as durable records; the strictness ladder **L0–L3**; CI policy |
+| [`AXIOM_AUDIT_FORMAT.md`](AXIOM_AUDIT_FORMAT.md) | *(backward)* the per-project `AXIOM_AUDIT.md` format (ratings, source codes, discharge plans) |
+| [`CORRESPONDENCE_INDEX.md`](CORRESPONDENCE_INDEX.md) | *(forward)* the machine-readable source↔Lean coverage + faithfulness index (corpus-scale); schema + FLMF/DLMF example |
+| [`FIDELITY_REVIEW.md`](FIDELITY_REVIEW.md) | *(forward)* vetting that a formalized statement **matches its source**; numeric cross-checks; strictness ladder **F0–F3** |
 | [`FORMALIZATION_YAML.md`](FORMALIZATION_YAML.md) | the Mathlib-Initiative `formalization.yaml` project card + the "generate, don't hand-author" rule |
 | [`COMPARATOR.md`](COMPARATOR.md) | external kernel-replay verification (Lean FRO comparator) protocol + registry |
 | [`ADOPTION.md`](ADOPTION.md) | how a project adopts these conventions and declares its local settings |
