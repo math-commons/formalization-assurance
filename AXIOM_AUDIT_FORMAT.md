@@ -147,8 +147,8 @@ generated `#print axioms` report — see [`FORMALIZATION_YAML.md`](FORMALIZATION
 **Add a drift guard.** Status that is *hand-written in prose* drifts behind the kernel —
 the same discharge fact ends up wrong in the README, the faithfulness digest, planning
 docs, **and the issue tracker**, all lagging one merged PR. The kernel ledger
-(`docs/axiom-report.txt`, CI-diffed) is the single source of truth; guard everything
-else against it:
+(generated `audit/axiom-report.txt`, CI-diffed) is the single source of truth; guard
+everything else against it:
 - **CI check**: grep the prose docs (and open **issue titles**) for axiom names that are
   **absent** from the live axiom set; fail/flag any hit (a doc or open issue naming a
   discharged axiom as if active).
