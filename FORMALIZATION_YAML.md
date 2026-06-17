@@ -27,10 +27,58 @@ formalization project keeps one at its top level.
   (the machine-readable faithfulness map).
 - **`acknowledgements`**.
 
+### A worked example (excerpt, illustrative)
+
+```yaml
+project:
+  name: jacobian-challenge
+  authors: [M. Douglas, …]
+  license: Apache-2.0
+
+sources:
+  - title: "The Jacobian Conjecture — challenge spec v0.4"
+    id: jc-spec-v0.4
+    type: challenge
+    author_contacted: false
+
+status:
+  scope: "the five walls of challenge v0.4"
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms:                       # generated from #print axioms — never hand-edited
+    standard: [propext, Classical.choice, Quot.sound]
+    project: []
+  main_results:
+    - name: genus_eq_zero_iff_homeo
+      file: Jacobians/Challenge/Headline.lean
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      literature_dependencies: ["Forster, Lectures on Riemann Surfaces §…"]
+      comparator_config: config-jacobian.json
+
+automation:
+  framework: lean-fleet
+  models: [opus-4.8, gpt-5.1-codex]
+  ai_authorship: "≈96% AI-authored; human steering per HANDOFF.md"
+
+fidelity:
+  divergences:
+    - "curve taken over ℂ, not ℝ (the challenge permits either)"
+
+alignment:
+  statements:
+    - source: jc-spec-v0.4#wall-A
+      lean: genus_eq_zero_iff_homeo
+      module: Jacobians/Challenge/Headline.lean
+      status: proved
+      note: ""
+```
+
 So `formalization.yaml` is the standardized home for the **machine accounting**
 (`status`, `main_results[].axioms`) and a **machine-readable faithfulness alignment**
-(`alignment.statements`). The project's prose docs (`FAITHFULNESS.md`,
-`VALIDATION.md`, `AXIOM_AUDIT.md`) are the human companions.
+(`alignment.statements`). The project's prose docs — `FAITHFULNESS.md` and
+`AXIOM_AUDIT.md` (see [`VERIFICATION_VALIDATION.md`](VERIFICATION_VALIDATION.md) for the
+naming rule) — are the human companions.
 
 ## The rule: generate machine facts, never hand-author them
 

@@ -4,7 +4,9 @@ External kernel-replay + axiom-whitelist check of a project headline theorem, vi
 the [Lean FRO comparator](https://github.com/leanprover/comparator). This is the
 strongest external **verification** signal: a third party re-exports the term and
 replays it through the Lean kernel, independent of the project's own CI, and
-confirms it uses only whitelisted axioms.
+confirms it uses only whitelisted axioms. It trusts only the kernel + Mathlib +
+comparator + your statement — **not** your build. **Cite a comparator pass as the
+authoritative verification of a headline result.**
 
 ## When to run
 
@@ -25,6 +27,11 @@ Build once (paths below are an example local layout; adjust to your machine):
 - The official insecure macOS `fake-landrun.sh` shim (no Linux sandbox on darwin).
 
 ## Per-project test layout
+
+> **Two ways to run this:** an **ad-hoc sibling dir** (this section + the next two —
+> good for a one-off check), or a **committed `verify.sh`** (the recommended end state
+> for a released project — skip to *"Recommended"* below). The sections here are the
+> mechanics the `verify.sh` automates.
 
 A sibling `<project>-comparator-run/`:
 
@@ -142,7 +149,7 @@ below (update in place on re-check).
 Each adopting project appends its comparator-verified results (update a row in place
 on re-check).
 
-| Project | Commit | Theorem(s) |
-|---|---|---|
-| [`mrdouglasny/jacobian-challenge`](https://github.com/mrdouglasny/jacobian-challenge) | `67af290` | `riemannRochL3` |
-| `mrdouglasny/jacobian-challenge` | `2bd75f8` | all 11 Buzzard property theorems axiom-free (whitelist-only, `config-buzzard.json`, 2026-06-14) |
+| Project | Commit | Theorem(s) | Config | Date |
+|---|---|---|---|---|
+| [`mrdouglasny/jacobian-challenge`](https://github.com/mrdouglasny/jacobian-challenge) | `67af290` | `riemannRochL3` | `config.json` | — |
+| `mrdouglasny/jacobian-challenge` | `2bd75f8` | all 11 Buzzard property theorems (axiom-free, whitelist-only) | `config-buzzard.json` | 2026-06-14 |

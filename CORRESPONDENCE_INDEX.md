@@ -37,7 +37,7 @@ One row per corpus entry:
 | `module` | `file:line` |
 | `status` | `proved` \| `statement-only` \| `sorry` \| `partial` \| `absent` \| `n/a` |
 | `fidelity` | `faithful` \| `flagged` \| `partial-domain` \| `unchecked` (+ link to the fidelity record) |
-| `numeric` | `pass@<ref>` \| `fail` \| `n/a` \| `none` (independent numerical cross-check) |
+| `numeric` | `pass@<ref>` (cross-check ran and matched) \| `fail` (ran, mismatch) \| `none` (not run) \| `n/a` (no numeric content to check, e.g. an existence statement) |
 | `deps` | key dependencies; **axioms used** (should be standard-3 only) |
 | `notes` | free text |
 
@@ -71,8 +71,11 @@ every entry already has a **canonical ID** (chapter.section.number) and a fixed
 release version, and there is an independent reference implementation (mpmath) for
 numerical cross-checks.
 
+*Shown space-padded for readability; the real file is **tab-separated**. The trailing
+`# …` on the second row is the `notes` column.*
+
 ```
-source_id     source_ref                      informal              lean_decl                         module                 status  fidelity  numeric        deps
+source_id     source_ref                      informal              lean_decl                         module                 status  fidelity  numeric        deps   notes
 DLMF:25.2.1   DLMF rel.1.2.x §25.2 (ζ series) ζ(s)=∑ n^{-s}, Re s>1 Flmf.Zeta.zeta_eq_tsum            Flmf/Zeta/Series.lean  proved  faithful  pass@mpmath    std-3
 DLMF:25.2.2   DLMF §25.2                       ζ(s) Euler product    Flmf.Zeta.zeta_eq_eulerProduct    Flmf/Zeta/Euler.lean   proved  flagged   pass@mpmath    std-3   # domain Re s>1 missing? see fidelity
 DLMF:25.4.1   DLMF §25.4                       ζ functional equation —                                 —                      absent  unchecked none           —
