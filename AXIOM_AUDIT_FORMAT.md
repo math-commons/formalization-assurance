@@ -42,6 +42,26 @@ linked `audit/vetting/` record, and briefly in the audit's notes.
 | **Placeholder** | Known to need replacement (type stub / infrastructure). Never downstream-load-bearing. |
 | **Flagged** | A concrete concern raised. **Do not consume downstream until resolved**; link the concern. |
 
+## Closure status (orthogonal to the rating)
+
+Rating measures *trust*; **closure status** measures *where the axiom sits relative to
+the headline theorems*. Conflating the two is the single biggest source of stale,
+slightly-false status prose ("axiom-free", "the only remaining axiom") — track it as a
+separate, kernel-derived field:
+
+| Status | Meaning | Kernel test |
+|---|---|---|
+| **discharged** | now a theorem; no longer declared | name absent from the axiom set |
+| **declared-on-closure** | declared **and** appears in a headline's `#print axioms` | in the headline closure |
+| **declared-off-closure** | declared but in **no** headline closure — scaffolding / off-path witness kept for a non-headline story | declared, but 0 headline mentions |
+
+`declared-off-closure` is **rare but real** (e.g. a polarization form or a cycle-basis
+scaffold kept after the headlines were rerouted off it). It is exactly what lets you
+honestly say *"every headline is `#print axioms` = standard-3"* while the kernel axiom
+**count is still > 0** — so state both numbers and never collapse them. All three states
+are kernel facts: derive them from the generated `#print axioms` report + the headline
+closure list, don't assert them in prose.
+
 ## What an axiom *is* here
 
 In these projects an **axiom** is a *vetted, provable theorem with a vetted
@@ -99,3 +119,41 @@ outline with lemma signatures, acceptance criteria) and link it.
   record; re-vet (new record, `superseded_by` the old) when a statement is
   **strengthened**.
 - **On rename/move**: chase every reference; the audit names the axioms.
+
+## Auditing presence & guarding drift
+
+Two failure modes seen repeatedly in agent-driven projects; both are cheap to prevent.
+
+**Audit presence by extracting the axiom *set*, not per-name pattern-matching.** When
+checking "is axiom X still live?", do **not** grep for each name individually — it is a
+footgun:
+- `git grep -E` silently ignores `\b` word boundaries (the pattern matches nothing → a
+  live axiom reads as discharged);
+- a trailing-space pattern (`axiom X `) misses declarations whose name ends the line
+  (multi-line signatures) → false "discharged".
+
+Instead, **extract the actual set once** and set-match against it:
+
+```bash
+# the live axiom set (ground truth)
+git grep -hE "^(noncomputable )?axiom " -- '<lib>' \
+  | sed -E 's/^(noncomputable )?axiom +([A-Za-z0-9_]+).*/\2/' | sort -u
+# better, when a build exists: enumerate from `#print axioms` of the headline set
+```
+
+Then `comm`/`grep -xF` each tracked name against that set. (Authoritative form: the
+generated `#print axioms` report — see [`FORMALIZATION_YAML.md`](FORMALIZATION_YAML.md).)
+
+**Add a drift guard.** Status that is *hand-written in prose* drifts behind the kernel —
+the same discharge fact ends up wrong in the README, the faithfulness digest, planning
+docs, **and the issue tracker**, all lagging one merged PR. The kernel ledger
+(`docs/axiom-report.txt`, CI-diffed) is the single source of truth; guard everything
+else against it:
+- **CI check**: grep the prose docs (and open **issue titles**) for axiom names that are
+  **absent** from the live axiom set; fail/flag any hit (a doc or open issue naming a
+  discharged axiom as if active).
+- **Link axiom ⟷ tracker issue**; discharge → close is then mechanical (a still-open
+  issue whose axiom is gone is a drift-guard hit).
+- Phrase headline claims against **closure status**, not raw counts: "every headline is
+  `#print axioms` = standard-3" (closure) is true even when "N declared axioms" (count)
+  is > 0 — see *Closure status* above.
