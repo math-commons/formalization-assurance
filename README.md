@@ -66,7 +66,7 @@ the weight. Many projects mix both modes.
 | [`AXIOM_AUDIT_FORMAT.md`](AXIOM_AUDIT_FORMAT.md) | *(backward)* the per-project `AXIOM_AUDIT.md` format (ratings, source codes, discharge plans) |
 | [`CORRESPONDENCE_INDEX.md`](CORRESPONDENCE_INDEX.md) | *(forward)* the machine-readable source↔Lean coverage + faithfulness index (corpus-scale); schema + FLMF/DLMF example |
 | [`FIDELITY_REVIEW.md`](FIDELITY_REVIEW.md) | *(forward)* vetting that a formalized statement **matches its source**; numeric cross-checks; strictness ladder **F0–F3** |
-| [`NUMERICAL_VALIDATION.md`](NUMERICAL_VALIDATION.md) | the general **parameter-sampling** numeric check — sample the parameter space, evaluate independently, gate in CI; generalizes FLMF's mpmath oracle to any project proving parametric facts/identities |
+| [`NUMERICAL_VALIDATION.md`](NUMERICAL_VALIDATION.md) | **independent-oracle cross-validation** — check a statement against an independent oracle (numeric sampling, CAS, SMT, exact); catches value / sign / constant / normalization bugs the kernel can't see, **blind** to quantifier / hypothesis / vacuity. A *partial* tier; generalizes FLMF's mpmath oracle |
 | [`FORMALIZATION_YAML.md`](FORMALIZATION_YAML.md) | the Mathlib-Initiative `formalization.yaml` project card + the "generate, don't hand-author" rule |
 | [`COMPARATOR.md`](COMPARATOR.md) | external kernel-replay verification (Lean FRO comparator) protocol + registry |
 | [`ADOPTION.md`](ADOPTION.md) | how a project adopts these conventions and declares its local settings |
