@@ -1,5 +1,9 @@
 # Axiom soundness vetting — capturing the evidence
 
+*For maintainers of **backward-chaining** projects that declare `axiom`s. Defines how
+to record each axiom's soundness review (`audit/vetting/`) and the **L0–L3** CI
+strictness ladder. The forward-chaining analog is [`FIDELITY_REVIEW.md`](FIDELITY_REVIEW.md).*
+
 The Lean kernel verifies *proofs*; it cannot verify that an `axiom` is **true**. A
 false axiom type-checks and passes CI while making the kernel inconsistent. So the
 truth / satisfiability of every project axiom is established separately by
@@ -29,7 +33,7 @@ tool: mcp__gemini__deep_think_gemini
 source_code: DT                 # DT/CX/GR/LP/SA/PR (see AXIOM_AUDIT_FORMAT.md)
 date: 2026-06-09
 questions: [typing, strength, non-vacuity, satisfiability]
-verdict: SATISFIABLE_FAITHFUL   # | FLAGGED | …
+verdict: SATISFIABLE   # SATISFIABLE | FLAGGED | INCONCLUSIVE
 rating: Likely correct          # Standard | Likely correct | Needs review | Flagged | Placeholder
 discharged: false               # true if since proved; keep the record for provenance
 superseded_by: null             # date of a later entry if the statement changed

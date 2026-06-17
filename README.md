@@ -11,6 +11,11 @@ certify that a *definition means what its name claims*, that a stated theorem is
 object** or resting on a **false axiom**. These conventions close that gap with
 artifacts a mathematician can audit **without reading the proofs**.
 
+> **New here?** This page is the map. For the conceptual model, read
+> [`VERIFICATION_VALIDATION.md`](VERIFICATION_VALIDATION.md). To wire the conventions
+> into a project, go to [`ADOPTION.md`](ADOPTION.md). The per-document index is the
+> **Documents** table below.
+
 ## The assurance model — three layers
 
 1. **Verification** — *are the proofs valid relative to explicit assumptions?*
@@ -21,23 +26,26 @@ artifacts a mathematician can audit **without reading the proofs**.
    literature + self-audit), captured as durable per-axiom records.
 3. **Validation** — *did we formalize the right object?* Two sub-layers:
    **(a) faithfulness** (the informal↔formal correspondence) and
-   **(b) characterization** (acceptance theorems up to a categorical
-   "the specification has exactly one model" certificate).
+   **(b) the acceptance ladder** (theorems that pin the definitions, up to a
+   categorical "the specification has exactly one model" certificate — see the
+   ladder in [`VERIFICATION_VALIDATION.md`](VERIFICATION_VALIDATION.md)).
 
 > **Slogan:** in formal mathematics, *verification is nearly free; the residual is
 > all validation (plus assumption review).*
 
 ## Two modes — backward and forward chaining
 
-Projects sit on a spectrum, and the dominant risk (hence the assurance spine) differs:
+Projects sit on a spectrum, and the dominant risk — hence the **assurance spine**, the
+documents that carry the assurance weight for that project — differs:
 
 - **Backward-chaining** — a posed *target spec* (e.g. a challenge): stub unknowns as
   `axiom`s, discharge top-down. Central risk = **unsound axioms**. Spine:
   `AXIOM_AUDIT_FORMAT` + `VETTING` (assumption review) + the categorical certificate
   in `VERIFICATION_VALIDATION`.
-- **Forward-chaining** — formalize a large external *corpus* bottom-up
-  (FLMF/DLMF, the Matrix Cookbook, a textbook): build up from foundations, ≈ no
-  axioms. Central risk = **unfaithful statements** + **incomplete coverage**. Spine:
+- **Forward-chaining** — formalize a large external *corpus* bottom-up (a reference
+  handbook such as NIST's **DLMF** — Digital Library of Mathematical Functions — the
+  Matrix Cookbook, or a textbook): build up from foundations, ≈ no axioms. Central
+  risk = **unfaithful statements** + **incomplete coverage**. Spine:
   `CORRESPONDENCE_INDEX` + `FIDELITY_REVIEW`.
 
 Both share verification (kernel + axiom certificate), faithfulness,
@@ -61,7 +69,7 @@ the weight. Many projects mix both modes.
 | [`FORMALIZATION_YAML.md`](FORMALIZATION_YAML.md) | the Mathlib-Initiative `formalization.yaml` project card + the "generate, don't hand-author" rule |
 | [`COMPARATOR.md`](COMPARATOR.md) | external kernel-replay verification (Lean FRO comparator) protocol + registry |
 | [`ADOPTION.md`](ADOPTION.md) | how a project adopts these conventions and declares its local settings |
-| [`templates/`](templates/) | copy-in templates: vetting entry, `policy.yml`, `AXIOM_AUDIT.md` skeleton |
+| [`templates/`](templates/) | copy-in templates: the assurance CI **caller workflow** + **sorry-allowlist**, the strictness **`policy.yml`**, the **vetting entry**, and the **`AXIOM_AUDIT.md` skeleton** |
 
 ## Core principles
 

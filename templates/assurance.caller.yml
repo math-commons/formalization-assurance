@@ -1,6 +1,7 @@
-# .github/workflows/assurance.yml — copy into the PROJECT repo.
-# One-line adoption of the shared assurance gate (build + axiom-report-in-sync +
-# sorry-confinement), driven by audit/vetting/policy.yml strictness.
+# Copy this file to `.github/workflows/assurance.yml` in YOUR project repo.
+# It is the CALLER; it invokes the shared reusable workflow `assure.yml` that lives in
+# this hub. One-line adoption of the assurance gate (build + axiom-report-in-sync +
+# sorry-confinement), driven by your audit/vetting/policy.yml strictness.
 name: assurance
 on:
   push: { branches: [main] }

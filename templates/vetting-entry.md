@@ -20,7 +20,7 @@ tool: mcp__gemini__deep_think_gemini
 source_code: DT                      # DT | CX | GR | LP | SA | PR
 date: YYYY-MM-DD
 questions: [typing, strength, non-vacuity, satisfiability]
-verdict: SATISFIABLE_FAITHFUL        # | FLAGGED | NEEDS_REVISION
+verdict: SATISFIABLE        # SATISFIABLE | FLAGGED | NEEDS_REVISION
 rating: Likely correct               # Standard | Likely correct | Needs review | Flagged | Placeholder
 discharged: false                    # true once proved; keep this record for provenance
 superseded_by: null                  # date of a later entry if the statement changed

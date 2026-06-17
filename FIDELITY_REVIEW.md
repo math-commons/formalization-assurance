@@ -1,5 +1,11 @@
 # Fidelity review — vetting that a formalized statement matches its source
 
+*For maintainers of **forward-chaining** projects (formalizing an external corpus).
+Defines how to vet that each Lean statement faithfully captures its informal source,
+and the **F0–F3** CI strictness ladder. The backward-chaining analog — vetting that
+assumed axioms are true — is [`VETTING.md`](VETTING.md). ("Fidelity" and
+"faithfulness" name the same property; see [`VERIFICATION_VALIDATION.md`](VERIFICATION_VALIDATION.md).)*
+
 The forward-chaining analog of axiom soundness vetting (`VETTING.md`). In
 backward chaining the question is *"is this assumed axiom true?"*; in forward
 chaining the proofs are real, so the question is **"does this Lean statement

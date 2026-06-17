@@ -51,6 +51,11 @@ and provide your project's `#print axioms` generator at `audit/axiom_report.lean
 committed `audit/axiom-report.txt` golden trace). *(Private hub: enable Settings → Actions →
 "Allow … access to components in private repositories" so other repos can call it.)*
 
+> **Filename convention (the CI is filename-sensitive — don't "fix" the separators):** the
+> generator is `audit/axiom_report.lean` (under**s**core) and its committed output is
+> `audit/axiom-report.txt` (hyphen). The Lean script and the `.txt` trace deliberately use
+> different separators; the workflow inputs default to exactly these paths.
+
 What the gates establish (and where the convention lives):
 
 - **Golden `#print axioms` trace** generated + CI-diffed (fail-with-regenerate) — *in the

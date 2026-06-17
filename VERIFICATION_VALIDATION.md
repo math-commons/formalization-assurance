@@ -2,6 +2,11 @@
 
 The standard V&V split (Boehm; IEEE 1012), specialized to a proof assistant.
 
+> Maps to the [README](README.md)'s three assurance layers: **verification** = "did
+> we build it right" (below); **assumption review** = are the assumed axioms true (its
+> own section); **validation** = "did we build the right thing" = faithfulness + the
+> acceptance ladder.
+
 ## The two questions
 
 - **Verification — "did we build it *right*?"** The proofs are valid: the kernel
@@ -42,6 +47,15 @@ The **informal↔formal correspondence is a *validation* activity** (it concerns
 project keeps a dedicated correspondence document, name it `FAITHFULNESS.md`, not
 `VERIFICATION.md`, and reserve "verification" for the kernel/axiom check.
 
+**Faithfulness vs. fidelity vs. soundness — one rule.** *Faithfulness* and *fidelity*
+are the **same** property: a formal statement matches its informal source. By
+convention "faithfulness" names the validation **layer** (and the per-project
+`FAITHFULNESS.md`); "fidelity" names the forward-chaining **review and record**
+(`FIDELITY_REVIEW.md`, the `fidelity` index column). Both belong to this forward,
+statement-matches-source sense. The **backward** question — *is an assumed axiom
+true?* — is **soundness** (a `SATISFIABLE` axiom in `VETTING.md`); never call it
+"faithful."
+
 ## The validation ladder
 
 A tiered list of acceptance theorems such that, once proved for a project's
@@ -68,7 +82,14 @@ than a look-alike. Ascending strength:
   prove **existence** (our construction is a model) and **uniqueness** (any two
   models are canonically isomorphic). Together: *the specification has exactly one
   model, and it is our construction* — the definitions are **forced**. This closes
-  (F1) outright.
+  (F1) outright. **Tier E is *the* categorical certificate** the README calls
+  "characterization"; Tier C proves the field's named theorems but need not be
+  categorical.
+
+> These acceptance **Tiers A–E** grade *how strongly the definitions are pinned*.
+> They are distinct from the *enforcement* ladders **L0–L3** (vetting strictness,
+> `VETTING.md`) and **F0–F3** (fidelity strictness, `FIDELITY_REVIEW.md`), which grade
+> how hard CI gates — not acceptance strength.
 
 ## Operational vs categorical specifications (the central point)
 
