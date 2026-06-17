@@ -1,0 +1,10 @@
+# audit/sorry-allowlist.txt — .lean files permitted to contain `sorry`.
+#
+# One repo-relative path per line. Every .lean file NOT listed here must be
+# sorry-free; the assurance gate fails (at L2/L3) if a `sorry` appears elsewhere.
+# Each entry is a deferred-proof scaffold — keep the list short and shrinking.
+# `sorryAx`, prose, and commented-out code are not counted.
+#
+# Example:
+# MyProject/Scaffolds/HardLemma.lean
+# MyProject/Anchors/DeferredTheorem.lean

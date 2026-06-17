@@ -1,0 +1,17 @@
+# .github/workflows/assurance.yml — copy into the PROJECT repo.
+# One-line adoption of the shared assurance gate (build + axiom-report-in-sync +
+# sorry-confinement), driven by audit/vetting/policy.yml strictness.
+name: assurance
+on:
+  push: { branches: [main] }
+  pull_request: {}
+  workflow_dispatch: {}
+jobs:
+  assure:
+    uses: math-commons/formalization-assurance/.github/workflows/assure.yml@main
+    # All inputs optional; defaults follow the ADOPTION.md conventions:
+    # with:
+    #   axiom_report_lean:   audit/axiom_report.lean    # your #print axioms generator
+    #   axiom_report_golden: audit/axiom-report.txt     # the committed golden trace
+    #   sorry_allowlist:     audit/sorry-allowlist.txt  # files allowed to hold `sorry`
+    #   build_args:          ""                          # extra `lake build` args

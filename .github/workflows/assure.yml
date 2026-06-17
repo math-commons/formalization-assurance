@@ -1,0 +1,141 @@
+# Reusable assurance gate — math-commons/formalization-assurance
+#
+# Implements the machine gates of ADOPTION.md §3 once, so an adopting project gets
+# them with a one-line caller workflow:
+#
+#   # .github/workflows/assure.yml in the PROJECT repo
+#   name: assurance
+#   on: { push: { branches: [main] }, pull_request: {}, workflow_dispatch: {} }
+#   jobs:
+#     assure:
+#       uses: math-commons/formalization-assurance/.github/workflows/assure.yml@main
+#       # all inputs optional; defaults follow the ADOPTION.md conventions
+#       # with:
+#       #   axiom_report_lean: audit/axiom_report.lean
+#       #   axiom_report_golden: audit/axiom-report.txt
+#       #   sorry_allowlist: audit/sorry-allowlist.txt
+#
+# Gates (build → axiom-report-in-sync → sorry-confinement) are run always; whether a
+# failing gate BLOCKS or merely WARNS is driven by the project's vetting_strictness
+# (audit/vetting/policy.yml): L0/L1 = warn-only, L2/L3 = enforced. So a project adopts
+# at L1 to see its real state, then raises to L2 to lock it down.
+#
+# NOTE: for a private hub, enable Settings → Actions → "Allow ... access to components
+# in private repositories" so other math-commons repos can call this workflow.
+
+on:
+  workflow_call:
+    inputs:
+      build_args:
+        description: "extra args passed to `lake build`"
+        type: string
+        default: ""
+      axiom_report_lean:
+        description: "project's #print axioms generator (Lean script). Skipped if absent."
+        type: string
+        default: "audit/axiom_report.lean"
+      axiom_report_golden:
+        description: "committed golden axiom report to diff against"
+        type: string
+        default: "audit/axiom-report.txt"
+      sorry_allowlist:
+        description: "file listing .lean paths permitted to contain `sorry` (one per line; missing = none allowed)"
+        type: string
+        default: "audit/sorry-allowlist.txt"
+      policy:
+        description: "assurance policy file (read for vetting_strictness)"
+        type: string
+        default: "audit/vetting/policy.yml"
+
+jobs:
+  assure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Strictness from policy
+        id: policy
+        run: |
+          set -uo pipefail
+          lvl="L1"
+          if [ -f "${{ inputs.policy }}" ]; then
+            v="$(grep -E '^[[:space:]]*vetting_strictness[[:space:]]*:' "${{ inputs.policy }}" | head -1 | sed -E 's/.*:[[:space:]]*//; s/[[:space:]]*#.*//; s/[[:space:]]*$//')"
+            [ -n "$v" ] && lvl="$v"
+          fi
+          case "$lvl" in L2|L3) strict=true ;; *) strict=false ;; esac
+          echo "level=$lvl"     >> "$GITHUB_OUTPUT"
+          echo "strict=$strict" >> "$GITHUB_OUTPUT"
+          mode="warn-only"; [ "$strict" = true ] && mode="ENFORCED"
+          echo "### Assurance — strictness \`$lvl\` (gates: $mode)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Install elan
+        run: |
+          set -euo pipefail
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o elan-init.sh
+          chmod +x elan-init.sh
+          ./elan-init.sh -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Cache Mathlib build artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            .lake/packages
+            .lake/build
+          # Rolling key: unique per commit so every run SAVES its build; restore-keys
+          # warm-start from the most recent prior cache (incremental, only changed
+          # modules + downstream recompile).
+          key: lake-${{ hashFiles('lake-manifest.json', 'lakefile.toml', 'lakefile.lean', 'lean-toolchain') }}-${{ github.sha }}
+          restore-keys: |
+            lake-${{ hashFiles('lake-manifest.json', 'lakefile.toml', 'lakefile.lean', 'lean-toolchain') }}-
+            lake-
+
+      - name: Fetch Mathlib oleans
+        run: lake exe cache get || true
+
+      - name: lake build
+        run: lake build ${{ inputs.build_args }}
+
+      - name: Axiom report in sync with the kernel
+        if: always()
+        run: |
+          set -uo pipefail
+          gen="${{ inputs.axiom_report_lean }}"; golden="${{ inputs.axiom_report_golden }}"
+          strict="${{ steps.policy.outputs.strict }}"
+          if [ ! -f "$gen" ]; then
+            echo "::warning::no axiom-report generator at '$gen' — skipping axiom sync (ADOPTION.md §3)."
+            echo "- ⚠️ no \`$gen\` — axiom-report sync skipped" >> "$GITHUB_STEP_SUMMARY"; exit 0
+          fi
+          lake env lean "$gen" > axiom-report.regenerated.txt
+          if diff -u "$golden" axiom-report.regenerated.txt; then
+            echo "### ✓ Axiom report matches the kernel" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "::error::'$golden' out of sync with #print axioms. Regenerate: lake env lean $gen > $golden"
+            echo "### ❌ Stale axiom report — \`lake env lean $gen > $golden\` and commit" >> "$GITHUB_STEP_SUMMARY"
+            if [ "$strict" = true ]; then exit 1; else echo "::notice::warn-only at strictness ${{ steps.policy.outputs.level }}"; fi
+          fi
+
+      - name: Sorries confined to the allowlist
+        if: always()
+        run: |
+          set -uo pipefail
+          allow="${{ inputs.sorry_allowlist }}"; strict="${{ steps.policy.outputs.strict }}"
+          echo "### Sorry guard (core must stay sorry-free; only allowlisted files may carry \`sorry\`)" >> "$GITHUB_STEP_SUMMARY"
+          fail=0
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            # strip line (`-- …`) and block (`/- … -/`) comments, then match a `sorry`
+            # token (term/tactic), excluding `sorryAx` and prose.
+            stripped="$(sed -E 's/--.*$//' "$f" | perl -0777 -pe 's{/-.*?-/}{}gs' 2>/dev/null)"
+            if grep -qE '(^|[^[:alnum:]_])sorry([^[:alnum:]_]|$)' <<< "$stripped"; then
+              if [ -f "$allow" ] && grep -qxF "$f" "$allow"; then
+                echo "- \`$f\` — allowed scaffold" >> "$GITHUB_STEP_SUMMARY"
+              else
+                echo "::error file=$f::\`sorry\` outside the allowlist — core must stay sorry-free (add to $allow if intended)"
+                echo "- ❌ \`$f\` — sorry not allowlisted" >> "$GITHUB_STEP_SUMMARY"; fail=1
+              fi
+            fi
+          done < <(git ls-files '*.lean')
+          [ "$fail" -eq 0 ] && echo "✓ every \`sorry\`-bearing file is allowlisted; core is sorry-free." >> "$GITHUB_STEP_SUMMARY"
+          if [ "$fail" -ne 0 ] && [ "$strict" != true ]; then echo "::notice::warn-only at strictness ${{ steps.policy.outputs.level }}"; fail=0; fi
+          exit $fail

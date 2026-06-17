@@ -39,10 +39,29 @@ In the project's `README.md` (and/or a short `audit/CONVENTIONS.md`), add:
 
 ## 3. Stand up the machine gates
 
-- **Golden `#print axioms` trace** generated + CI-diffed (fail-with-regenerate).
-- **Axiom set + counts generated** from the same source; YAML/README counts derived
-  or CI-checked — never hand-authored (`FORMALIZATION_YAML.md`).
-- **Vetting coverage** enforced at the declared strictness level (`VETTING.md`).
+**The fast path — the shared reusable workflow.** Build + axiom-report-in-sync +
+sorry-confinement are implemented once in this hub's
+[`.github/workflows/assure.yml`](.github/workflows/assure.yml). Adopt them by copying
+[`templates/assurance.caller.yml`](templates/assurance.caller.yml) into your repo as
+`.github/workflows/assurance.yml` — a one-line `uses:` of the shared workflow. It reads
+`audit/vetting/policy.yml` for strictness, so the gates **warn at L0/L1 and enforce at
+L2/L3**: adopt at L1 to see your real state, raise to L2 to lock it down. Drop in
+[`templates/sorry-allowlist.txt`](templates/sorry-allowlist.txt) as `audit/sorry-allowlist.txt`
+and provide your project's `#print axioms` generator at `audit/axiom_report.lean` (+ the
+committed `audit/axiom-report.txt` golden trace). *(Private hub: enable Settings → Actions →
+"Allow … access to components in private repositories" so other repos can call it.)*
+
+What the gates establish (and where the convention lives):
+
+- **Golden `#print axioms` trace** generated + CI-diffed (fail-with-regenerate) — *in the
+  reusable workflow.*
+- **Axiom set + counts generated** from the same source; YAML/README counts derived or
+  CI-checked — never hand-authored (`FORMALIZATION_YAML.md`).
+- **Sorry-confinement** — only allowlisted files may carry `sorry`; the core stays
+  sorry-free — *in the reusable workflow.*
+- **Vetting coverage** enforced at the declared strictness level (`VETTING.md`). *(Coverage
+  enforcement — every axiom has a vetting record — is not yet in the reusable workflow; for
+  now it's the L2/L3 manual gate. Tracked as a follow-up.)*
 - **Spec conformance** (if the project targets an external spec): restate the spec
   signatures as `example`s discharged by the project's decls.
 - **Comparator** (optional, for released/headline results): `COMPARATOR.md`.
