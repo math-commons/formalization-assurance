@@ -82,12 +82,12 @@ the weight. Many projects mix both modes.
 
 - The **methodology paper** (narrative + justification) is the publication; this
   repo is the **operational spec** projects implement.
-- `~/.claude/CLAUDE.md` carries one-line pointers here so agent sessions
-  auto-consult these conventions.
-- Lean *code* conventions (naming, style, tactics) live separately in
-  `mathlib-ready/docs/`; this repo is about *project-level assurance*, not code
-  style.
+- An agent session's global config can carry a one-line pointer here so these
+  conventions are auto-consulted.
+- Lean *code* conventions (naming, style, tactics) live elsewhere; this repo is
+  about *project-level assurance*, not code style.
 
 ## Status
 
-v1 scaffold. First adopter: `math-commons/jacobian-challenge`.
+v1 scaffold. First adopter:
+[`mrdouglasny/jacobian-challenge`](https://github.com/mrdouglasny/jacobian-challenge).

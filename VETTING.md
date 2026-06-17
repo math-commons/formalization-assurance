@@ -14,7 +14,7 @@ in ephemeral, often gitignored, MCP logs. **This convention captures it.**
 
 ## What to capture
 
-One **vetting record per axiom**, in `docs/vetting/<AxiomName>.md`, with one entry
+One **vetting record per axiom**, in `audit/vetting/<AxiomName>.md`, with one entry
 per *vetting event* (re-vettings append; newest first). Each entry — see
 [`templates/vetting-entry.md`](templates/vetting-entry.md) — carries a
 machine-readable YAML front-matter header plus a verbatim body:
@@ -67,7 +67,7 @@ mandated. A project declares one level in [`templates/policy.yml`](templates/pol
 Mechanics that make L2/L3 cheap: the **kernel-authoritative axiom set** comes from
 the `#print axioms` report (same generated source as the axiom counts — see
 `FORMALIZATION_YAML.md` "generate, don't hand-author"); coverage is a set-difference
-against the `docs/vetting/*.md` front-matter, and freshness is a `statement_hash`
+against the `audit/vetting/*.md` front-matter, and freshness is a `statement_hash`
 compare. **No contributor anticipates anything.**
 
 Recommended rollout for a new adopter: **L1 now** (so CI doesn't red before records
@@ -77,6 +77,6 @@ populated.
 ## Relationship to `AXIOM_AUDIT.md` and `formalization.yaml`
 
 - `AXIOM_AUDIT.md` (per `AXIOM_AUDIT_FORMAT.md`) holds the *verdict + plan + consumers*;
-  the `docs/vetting/` records hold the *evidence* it summarizes.
+  the `audit/vetting/` records hold the *evidence* it summarizes.
 - `formalization.yaml › review` can aggregate the vetting front-matter (model,
   date, verdict per axiom) — generated, not hand-written.

@@ -7,12 +7,12 @@
 In this project an **axiom** is a *vetted, provable theorem with a vetted discharge
 plan* — a staging point, not a fundamental assumption. Format + conventions:
 [`math-commons/formalization-assurance/AXIOM_AUDIT_FORMAT.md`](https://github.com/math-commons/formalization-assurance/blob/main/AXIOM_AUDIT_FORMAT.md).
-Per-axiom *evidence* (model + prompt + reply) is under `docs/vetting/`.
+Per-axiom *evidence* (model + prompt + reply) is under `audit/vetting/`.
 
 ---
 
 **Active axioms in build: N.** <one-line summary>
-*(Count is derived from the generated `docs/axiom-report.txt` — do not hand-edit.)*
+*(Count is derived from the generated `audit/axiom-report.txt` — do not hand-edit.)*
 
 ---
 
@@ -23,7 +23,7 @@ Per-axiom *evidence* (model + prompt + reply) is under `docs/vetting/`.
 **File**: `<path>:<line>`
 **Statement** (informal): <one paragraph>.
 **Vetting**: **<Rating>** (`<codes>`) — <reference + brief justification> →
-[vetting](docs/vetting/<AxiomName>.md)
+[vetting](audit/vetting/<AxiomName>.md)
 **Strategy / Plan**: <how to discharge + estimate; link a plan doc if long>.
 **Consumers**: <downstream theorems that load-bear on this axiom>.
 

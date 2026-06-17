@@ -45,7 +45,7 @@ entry, against the verbatim source.
 ## Capture (same discipline as axiom vetting)
 
 For any entry whose fidelity is non-obvious or `flagged`, write a record
-`docs/fidelity/<source_id>.md` (template mirrors `templates/vetting-entry.md`), with
+`audit/fidelity/<source_id>.md` (template mirrors `templates/vetting-entry.md`), with
 YAML front-matter:
 
 ```yaml
@@ -68,13 +68,13 @@ separate record.
 ## Strictness ladder — a per-project knob
 
 Calibrated to contributor sophistication and stakes, like `VETTING.md`'s L0–L3.
-Declared in `docs/fidelity/policy.yml` (`fidelity_strictness: F2`); CI reads it.
+Declared in `audit/fidelity/policy.yml` (`fidelity_strictness: F2`); CI reads it.
 
 | Level | CI behavior | Fits |
 |---|---|---|
 | **F0 — none** | index maintained by hand; no checks | exploratory |
 | **F1 — numeric** | every formula-shaped `proved` entry must carry a `numeric: pass@<ref>` (or justified `n/a`); fail otherwise | any computational corpus (special functions, identities) |
-| **F2 — numeric + review on gaps** | F1, **plus** every entry the numeric check can't fully exercise, and every `flagged`, needs a `docs/fidelity/` record | multi-contributor; high-fidelity corpora |
+| **F2 — numeric + review on gaps** | F1, **plus** every entry the numeric check can't fully exercise, and every `flagged`, needs a `audit/fidelity/` record | multi-contributor; high-fidelity corpora |
 | **F3 — full** | F2, plus a fidelity record for **every** in-scope entry; `statement_hash`-style freshness so a re-stated theorem re-opens its review | reference-grade libraries (FLMF aspiration) |
 
 Mechanics that make F1/F2 cheap: a numeric harness emits the `numeric` column; the

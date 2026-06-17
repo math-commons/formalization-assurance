@@ -137,11 +137,12 @@ Add one line to the project's `README.md` naming the verified theorem(s) + the
 commit hash actually checked, linking the comparator. Append a row to the registry
 below (update in place on re-check).
 
-## Verified-runs registry (math-commons)
+## Verified-runs registry
+
+Each adopting project appends its comparator-verified results (update a row in place
+on re-check).
 
 | Project | Commit | Theorem(s) |
 |---|---|---|
-| `lgt` | `ec975bd` | `ym_mass_gap_exponential_decay`, `ym_mass_gap_rate_exists` |
-| `hille-yosida` | `99dafa7` | `bernstein_theorem` |
-| `jacobian-challenge` | `67af290` | `riemannRochL3` |
-| `jacobian-challenge` | `2bd75f8` | all 11 Buzzard property theorems axiom-free (whitelist-only, `config-buzzard.json`, 2026-06-14) |
+| [`mrdouglasny/jacobian-challenge`](https://github.com/mrdouglasny/jacobian-challenge) | `67af290` | `riemannRochL3` |
+| `mrdouglasny/jacobian-challenge` | `2bd75f8` | all 11 Buzzard property theorems axiom-free (whitelist-only, `config-buzzard.json`, 2026-06-14) |

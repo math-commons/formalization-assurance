@@ -1,4 +1,4 @@
-<!-- Template for docs/vetting/<AxiomName>.md in an adopting project.
+<!-- Template for audit/vetting/<AxiomName>.md in an adopting project.
      One ## entry per vetting event, newest first. Keep prior entries
      (re-vettings append; mark the superseded one via `superseded_by`).
      See VETTING.md for the convention. -->

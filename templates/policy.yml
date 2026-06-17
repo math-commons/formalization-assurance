@@ -1,4 +1,4 @@
-# docs/vetting/policy.yml — per-project assurance settings (CI reads this).
+# audit/vetting/policy.yml — per-project assurance settings (CI reads this).
 # See math-commons/formalization-assurance/VETTING.md for the strictness ladder.
 
 # Axiom-vetting coverage enforcement:
@@ -7,7 +7,7 @@
 vetting_strictness: L1
 
 # Kernel-authoritative axiom set + counts (generated; never hand-authored).
-axiom_report: docs/axiom-report.txt
+axiom_report: audit/axiom-report.txt
 
 # Where per-axiom vetting records live.
-vetting_dir: docs/vetting
+vetting_dir: audit/vetting
