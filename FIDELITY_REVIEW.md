@@ -82,6 +82,51 @@ correspondence index gives coverage = set-difference, so CI computes
 "`proved` entries missing a required numeric/record" automatically — no one
 anticipates anything (`FORMALIZATION_YAML.md` "generate, don't hand-author").
 
+## Reviewer-facing affordances (put these in the human digest)
+
+The index + records above are the *machine/audit* side. A human reviewer also needs two
+things in the project's curated digest (its `FAITHFULNESS.md` / reviewer guide), because the
+kernel cannot catch misformalization and a reviewer's time is the scarce resource. Prior art:
+[`rkirov/jacobian-claude`](https://github.com/rkirov/jacobian-claude)'s `docs/REVIEW.md`.
+
+**1. A "subtleties to check" crosswalk — tell the reviewer where to *doubt*.** The usual
+crosswalk says "this Lean decl ⟷ this informal claim, and here's the proof idea" — i.e. what's
+*true*. Add a column/line per headline naming the **specific place misformalization could hide**
+— the failure mode (from the list above) that actually threatens *this* statement:
+
+| Lean | Informal claim | **Subtlety to check** |
+|---|---|---|
+| `genus_eq_zero_iff_homeo` | genus 0 ⟺ X ≅ S² | **homeomorphism, not biholomorphism**; the metric S² |
+| `exists_riemannRoch_divisor` | `l(D) − l(K−D) = deg D + 1 − g` | the germ-quotient `lDim` kills *only* junk |
+| `abelJacobi_twoPoint_ne_zero` | AJ(P−Q) ≠ 0, g ≥ 1 | `abelJacobi` is the *honest* path-integral map |
+
+This is the difference between "here's why it's true" and "here's where to look if it isn't" —
+the latter is the actual job of a faithfulness review.
+
+**2. A "deliberate design choices (not bugs)" section — tell the reviewer what *not* to flag.**
+Formalizations carry intentional conventions that make a statement *look* weaker or stranger
+than the textbook's; without a pre-emptive list, a reviewer wastes time re-deriving that each is
+fine (or worse, files a non-bug). Enumerate them with the "check it is *equivalent*, not broken"
+framing. Recurring kinds:
+
+- **Junk-value conventions** — germs / `toFun` carry arbitrary values at poles/off-domain;
+  statements quotient by a "zero" relation or use order/germ language. When a statement looks
+  weaker, this is usually why.
+- **Carrier/encoding wrappers** — `ULift` to hit a universe-polymorphic signature; a bundled
+  hom type; a pair-representation standing in for a missing bundle type.
+- **Scalar / instance diamonds** — e.g. `SMul ℝ ℂ` / `restrictScalars` at the manifold layer,
+  handled by an elaboration flag (`backward.isDefEq.respectTransparency false`) or explicit
+  routing; **elaboration-only, the kernel rechecks**.
+- **Typeclass-vs-hypothesis choices** — a side condition carried as `[Fact …]` so downstream
+  synthesis fires (a Lean-mechanics choice, not a math restriction).
+- **Definitional substitutes** — discrete continuation standing in for an integral; a chosen
+  representative for an object defined up to a lattice/equivalence.
+- **Axioms as documented inputs, not gaps** — remaining axioms are off the headline closure and
+  textbook-standard (vetted), not `sorry`s; "axiom-clean" means `#print axioms` = standard-3.
+
+Both belong in the *curated digest* (bounded, high-signal), not the exhaustive index. Reference
+implementation: `mrdouglasny/jacobian-challenge`'s `docs/FAITHFULNESS.md`.
+
 ## One-line summary
 
 **Backward chaining's spine is "are the assumptions true?" (`VETTING.md`); forward

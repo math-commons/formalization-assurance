@@ -62,6 +62,61 @@ cd <project>-comparator-run && \
 
 Pass = `Lean default kernel accepts the solution / Your solution is okay!`
 
+## Recommended: a committed one-command `verify.sh`
+
+The sibling-dir + env-var invocation above is the *mechanics*. For a released project,
+**commit the workspace and a self-bootstrapping `scripts/verify.sh` into the repo** so any
+reviewer reproduces the external check with one command on a fresh clone — no manual setup,
+no remembering env vars. This is the single highest-value reviewer affordance (prior art:
+[`rkirov/jacobian-claude`](https://github.com/rkirov/jacobian-claude)'s `verify.sh`).
+
+Layout (in-repo, vs the sibling `<project>-comparator-run/`):
+- `scripts/comparator/` — `Challenge.lean`, `Solution.lean`, `config.json` (+ extra configs),
+  `lean-toolchain`, and a `lakefile.toml` whose `[[require]]` points at the parent repo with
+  `path = "../.."` (the workspace lives one dir below `scripts/`). `.gitignore` its `.lake/` +
+  `lake-manifest.json`. The stray `.lean` files are **not** swept into the main build as long
+  as the project's `lean_lib` roots at its own module dir (the usual case).
+- `scripts/verify.sh` — clones `comparator` + `lean4export` **pinned to the workspace's
+  `lean-toolchain`** (the `.olean` export format is toolchain-locked), builds them, builds the
+  workspace, and runs the comparator.
+
+Reference script (adjust the libs/configs to the project):
+
+```bash
+#!/usr/bin/env bash
+# External re-verification: real leanprover/comparator (statement match + permitted-axiom
+# check + independent kernel replay via lean4export). The library .oleans are NOT trusted.
+set -euo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"; WS="$HERE/comparator"
+CFG="${1:-config.json}"; [ -f "$WS/$CFG" ] || { echo "no config: $WS/$CFG" >&2; exit 2; }
+TAG="$(tr -d '[:space:]' < "$WS/lean-toolchain" | sed -e 's#^leanprover/lean4:##')"
+WORK="${COMPARATOR_WORK:-$HOME/.cache/<project>-comparator}"; mkdir -p "$WORK"
+for r in comparator lean4export; do
+  [ -d "$WORK/$r" ] || git clone --branch "$TAG" --depth 1 "https://github.com/leanprover/$r" "$WORK/$r"
+  ( cd "$WORK/$r" && lake build )
+done
+if [ -z "${COMPARATOR_LANDRUN:-}" ] && command -v landrun >/dev/null 2>&1; then
+  COMPARATOR_LANDRUN="$(command -v landrun)"; fi   # Linux sandbox; macOS runs unsandboxed
+[ -n "${COMPARATOR_LANDRUN:-}" ] && export COMPARATOR_LANDRUN
+export PATH="$WORK/lean4export/.lake/build/bin:$PATH"
+cd "$WS"; lake build Challenge Solution
+exec lake env "$WORK/comparator/.lake/build/bin/comparator" "$CFG"
+```
+
+**Internal vs external — keep both, label them.** A project's "how to re-check" should split:
+*internal* checks (`#print axioms` / axiom-report diff / count consistency) **trust the
+project's own `.oleans` and report generator**; `verify.sh` is the *external* check that trusts
+only the kernel + Mathlib + comparator + the verbatim spec, re-deriving every proof. Cite the
+external one as authoritative.
+
+**Trust boundary to state in the script header:** only the Lean kernel, Mathlib, comparator,
+and `Challenge.lean` (the statement) are trusted; the project library + any vendored port are
+re-exported and re-checked, so a corrupted `.olean`, poisoned build cache, or rogue axiom is
+caught even when the project's own `#print axioms` (on its build) would not surface it.
+
+> If `verify.sh` is the trust root, add it (and any comparator CI job) to `CODEOWNERS` so it
+> can't be silently weakened — same rationale as protecting the axiom-report generator.
+
 ## Gotchas
 
 - `comparator/runtests.lean` overwrites the test project's `lean-toolchain` —
