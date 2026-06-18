@@ -67,10 +67,11 @@ the weight. Many projects mix both modes.
 | [`CORRESPONDENCE_INDEX.md`](CORRESPONDENCE_INDEX.md) | *(forward)* the machine-readable source↔Lean coverage + faithfulness index (corpus-scale); schema + FLMF/DLMF example |
 | [`FIDELITY_REVIEW.md`](FIDELITY_REVIEW.md) | *(forward)* vetting that a formalized statement **matches its source**; numeric cross-checks; strictness ladder **F0–F3** |
 | [`NUMERICAL_VALIDATION.md`](NUMERICAL_VALIDATION.md) | **independent-oracle cross-validation** — check a statement against an independent oracle (numeric sampling, CAS, SMT, exact); catches value / sign / constant / normalization bugs the kernel can't see, **blind** to quantifier / hypothesis / vacuity. A *partial* tier; generalizes FLMF's mpmath oracle |
+| [`OBJECT_CONTRACTS.md`](OBJECT_CONTRACTS.md) | *(validation)* per-**definition** contract cards — informal↔Lean signature, an **anti-degeneracy** clause, and a `known_values` **test matrix** (instance → expected → theorem → status); differential testing for definitions, status read from `#print axioms`. The definition-side analogue of axiom vetting |
 | [`FORMALIZATION_YAML.md`](FORMALIZATION_YAML.md) | the Mathlib-Initiative `formalization.yaml` project card + the "generate, don't hand-author" rule |
 | [`COMPARATOR.md`](COMPARATOR.md) | external kernel-replay verification (Lean FRO comparator) protocol + registry |
 | [`ADOPTION.md`](ADOPTION.md) | how a project adopts these conventions and declares its local settings |
-| [`templates/`](templates/) | copy-in templates: the assurance CI **caller workflow** + **sorry-allowlist**, the strictness **`policy.yml`**, the **vetting entry**, and the **`AXIOM_AUDIT.md` skeleton** |
+| [`templates/`](templates/) | copy-in templates: the assurance CI **caller workflow** + **sorry-allowlist**, the strictness **`policy.yml`**, the **vetting entry**, the **object-contract card**, and the **`AXIOM_AUDIT.md` skeleton** |
 
 ## Core principles
 
