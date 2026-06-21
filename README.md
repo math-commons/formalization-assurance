@@ -70,7 +70,8 @@ the weight. Many projects mix both modes.
 | [`COMPARATOR.md`](COMPARATOR.md) | external kernel-replay verification (Lean FRO comparator) protocol + registry |
 | [`ADOPTION.md`](ADOPTION.md) | how a project adopts these conventions and declares its local settings |
 | [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md) | known design tensions and limitations, with who raised them and where we stand |
-| [`templates/`](templates/) | copy-in templates: the assurance CI **caller workflow** + **sorry-allowlist**, the strictness **`policy.yml`**, the **vetting entry**, the **object-contract card**, and the **`AXIOM_AUDIT.md` skeleton** |
+| [`DESIGN_RECORDS.md`](DESIGN_RECORDS.md) | how to record a settled design choice (encoding, generality, bundling) with its alternatives and rationale; ADR-style |
+| [`templates/`](templates/) | copy-in templates: the assurance CI **caller workflow** + **sorry-allowlist**, the strictness **`policy.yml`**, the **vetting entry**, the **object-contract card**, the **design record**, and the **`AXIOM_AUDIT.md` skeleton** |
 
 ## Core principles
 

@@ -36,6 +36,7 @@ A markdown file with a YAML front-block and a short prose reader's guide. Fields
 | `known_values` | the **test matrix**: each row is `instance → expected → theorem → status → note`. Differential testing for mathematics. |
 | `well_definedness` | the instance/fact the definition silently relies on (e.g. integrability, finite-dimensionality) |
 | `anti_degeneracy` | `history` of any real degeneracy bug + the `current_guard` that excludes it |
+| `encoding_rationale` | *(optional)* pointer to the [design record](DESIGN_RECORDS.md) that justifies this object's encoding choice, when there was a real alternative |
 | `status` | one-line summary of where the object is validated |
 
 The **anti-degeneracy clause** is the load-bearing part: it names the property a plausible
