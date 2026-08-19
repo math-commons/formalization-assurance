@@ -68,6 +68,7 @@ the weight. Many projects mix both modes.
 | [`OBJECT_CONTRACTS.md`](OBJECT_CONTRACTS.md) | *(validation)* per-**definition** contract cards — informal↔Lean signature, an **anti-degeneracy** clause, and a `known_values` **test matrix** (instance → expected → theorem → status); differential testing for definitions, status read from `#print axioms`. The definition-side analogue of axiom vetting |
 | [`FORMALIZATION_YAML.md`](FORMALIZATION_YAML.md) | the Mathlib-Initiative `formalization.yaml` project card + the "generate, don't hand-author" rule |
 | [`COMPARATOR.md`](COMPARATOR.md) | external kernel-replay verification (Lean FRO comparator) protocol + registry |
+| [`PALOMAR_REGISTRY.md`](PALOMAR_REGISTRY.md) | submitting to the Palomar public registry: the Mathlib-only Challenge rule, the mechanical gate and what it does *not* establish, the six editorial passes and their scoring floor, lifecycle and versioning |
 | [`ADOPTION.md`](ADOPTION.md) | how a project adopts these conventions and declares its local settings |
 | [`OPEN_QUESTIONS.md`](OPEN_QUESTIONS.md) | known design tensions and limitations, with who raised them and where we stand |
 | [`DESIGN_RECORDS.md`](DESIGN_RECORDS.md) | how to record a settled design choice (encoding, generality, bundling) with its alternatives and rationale; ADR-style |
